@@ -1,0 +1,15 @@
+.container {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    color: #373b3f;
+}
+
+#login-form {
+    margin-top: 100px;
+    color: #373b3f;
+}
+
+#loginbutton {
+    background-color: #1cc29f;
+    border-color: #1cc29f;
+}

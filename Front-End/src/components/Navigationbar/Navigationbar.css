@@ -1,0 +1,38 @@
+#nav-bar {
+    background-color: #373b3f;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.navbarbuttons {
+    background-color: #1cc29f;
+    border-color:  #1cc29f;
+}
+
+.navbarbuttons:hover {
+    background-color: #ace4d6;
+    border-color: #ace4d6;
+}
+
+#navbarlogin {
+    background-color: #373b3f;
+    color: rgb(238, 238, 238);
+}
+
+#nav-brand {
+    color:  rgb(238, 238, 238);
+}
+
+#dropdown-basic {
+    background-color: #1cc29f;
+    border-color:  #1cc29f;
+    margin-right: 10px;
+}
+
+#dashboardLink {
+    color: rgb(238, 238, 238);
+}
+
+#dashboardLink:hover {
+    text-decoration: none;
+}
+

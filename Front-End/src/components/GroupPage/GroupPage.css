@@ -1,0 +1,63 @@
+.groupcontainer {
+    margin-top: 20px;
+}
+
+#grouppagetop {
+    background-color: rgb(238, 238, 238);
+    padding:20px;
+    border-radius: 5px;
+}
+
+#grouptitle {
+    font-size: 40px;
+}
+
+#groupcontent {
+    margin-top: 10px;
+}
+
+#addanexpense {
+    background-color: rgb(255, 81, 0);
+    border-color:   rgb(255, 81, 0);
+}
+
+#closemodal {
+    background-color: #373b3f;
+    border-color:   #373b3f;
+    color: rgb(238, 238, 238);
+    font-family: 'Montserrat', sans-serif;
+}
+
+#modaltop {
+    background-color: #1cc29f;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+}
+
+#expensecreated {
+    font-weight: bold;
+}
+
+#accordian {
+    margin-left: 14px;
+    width:700px
+}
+
+#expense {
+    font-size: 21px;
+    color: #373b3f;
+}
+
+#commentsheading {
+    margin-top: 8px;;
+}
+
+#commentbutton {
+    margin-top: 8px;
+    background-color: rgb(255, 81, 0);
+    border-color:   rgb(255, 81, 0);
+}
+
+#deleteCommentButton {
+    float: right;
+}

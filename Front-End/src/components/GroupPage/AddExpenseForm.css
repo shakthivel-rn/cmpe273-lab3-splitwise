@@ -1,0 +1,8 @@
+.expenseForm {
+    font-family: 'Montserrat', sans-serif;
+}
+
+#submitExpenseButton {
+    background-color: #1cc29f;
+    border-color: #1cc29f;
+}

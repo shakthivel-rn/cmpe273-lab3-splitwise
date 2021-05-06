@@ -1,0 +1,33 @@
+.description {
+    margin-top: 100px;
+    font-family: Montserrat-ExtraBold;
+}
+
+.description h1 {
+    text-transform: uppercase;
+    font-weight: 1000;
+    font-size: 47px;
+    color: #373b3f;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.custom-shape-divider-bottom-1615528068 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1615528068 svg {
+    position: relative;
+    display: block;
+    width: calc(159% + 1.3px);
+    height: 123px;
+}
+
+.custom-shape-divider-bottom-1615528068 .shape-fill {
+    fill: #373B3F;
+}

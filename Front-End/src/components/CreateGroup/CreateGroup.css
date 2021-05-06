@@ -1,0 +1,14 @@
+.creategroup {
+    margin-top: 20px;
+}
+
+.groupdetails { 
+    margin-top: 20px;
+}
+
+.groupButtons {
+    margin-top: 10px;
+    margin-right: 10px;
+    background-color: #1cc29f;
+    border-color:  #1cc29f;
+}

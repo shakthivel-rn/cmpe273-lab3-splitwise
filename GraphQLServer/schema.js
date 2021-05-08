@@ -91,7 +91,31 @@ const RootQuery = new GraphQLObjectType({
     }
 })
 
+const RootMutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+        login: {
+            type: GraphQLString,
+            args:{
+                email: {type: GraphQLString},
+                password: {type: GraphQLString}
+            },
+            resolve(parent, args) {
+                const email = args.email;
+                const password = args.password;
+                const data = {
+                    email,
+                    password
+                }
+                return axios.post('http://localhost:3001/login', data)
+                .then(res => res.data);
+            }
+        }
+    }
+});
+
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: RootMutation
 })
 

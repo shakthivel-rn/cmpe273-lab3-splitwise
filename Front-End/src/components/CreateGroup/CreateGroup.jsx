@@ -10,6 +10,8 @@ import {
 import axios from 'axios';
 import { connect } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import createGroupMutation from '../../graphql/mutations/group';
+import apolloClient from '../../graphql/apolloclient/client';
 import Navigationbar from '../Navigationbar/Navigationbar';
 
 class CreateGroup extends Component {
@@ -75,12 +77,28 @@ class CreateGroup extends Component {
     const {
       memberEmails, groupName, userId,
     } = this.state;
-    const data = {
+    /* const data = {
       userId,
       memberEmails,
       groupName,
-    };
-    axios.post('http://localhost:3001/createGroup', data)
+    }; */
+    apolloClient.mutate({
+      operationName: 'creategroup',
+      mutation: createGroupMutation,
+      variables: {
+        userId, memberEmails, groupName,
+      },
+    }).then(() => {
+      this.setState({
+        groupCreatedFlag: true,
+      });
+    })
+      .catch(() => {
+        this.setState({
+          invalidGroupNameFlag: true,
+        });
+      });
+    /* axios.post('http://localhost:3001/createGroup', data)
       .then(() => {
         this.setState({
           groupCreatedFlag: true,
@@ -90,7 +108,7 @@ class CreateGroup extends Component {
         this.setState({
           invalidGroupNameFlag: true,
         });
-      });
+      }); */
 
     const imageData = new FormData();// If file selected
     const { selectedFile } = this.state;

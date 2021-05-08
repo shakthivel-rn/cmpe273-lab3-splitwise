@@ -131,6 +131,26 @@ const RootMutation = new GraphQLObjectType({
                 return axios.post('http://localhost:3001/login', data)
                 .then(res => res.data);
             }
+        },
+        creategroup: {
+            type: GraphQLString,
+            args:{
+                userId: {type: GraphQLString},
+                memberEmails: {type: GraphQLList(GraphQLString)},
+                groupName: {type: GraphQLString}
+            },
+            resolve(parent, args) {
+                const userId = args.userId;
+                const memberEmails = args.memberEmails;
+                const groupName = args.groupName;
+                const data = {
+                    userId,
+                    memberEmails,
+                    groupName
+                }
+                return axios.post('http://localhost:3001/createGroup', data)
+                .then(res => res.data);
+            }
         }
     }
 });

@@ -44,7 +44,7 @@ const profileImgUpload = multer({
   },
 }).single('profileImage');
 
-router.post('/', checkAuth, async (req, res) => {
+router.post('/', async (req, res) => {
   const existingGroup = await Groups.findOne({ name: req.body.groupName });
   if (existingGroup === null) {
     const creatorUser = await Users.findOne({ _id: req.body.userId });

@@ -10,6 +10,8 @@ import {
 } from 'react-bootstrap';
 import { propTypes } from 'react-bootstrap/esm/Image';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import { signUpMutation } from '../../graphql/mutations/user';
+import apolloClient from '../../graphql/apolloclient/client';
 import Navigationbar from '../Navigationbar/Navigationbar';
 
 class Register extends Component {
@@ -56,13 +58,36 @@ class Register extends Component {
   submitRegister = (e) => {
     e.preventDefault();
     const { name, email, password } = this.state;
-    const data = {
+    /* const data = {
       name,
       email,
       password,
-    };
+    }; */
     axios.defaults.withCredentials = true;
-    axios.post('http://localhost:3001/register', data)
+    apolloClient.mutate({
+      operationName: 'signup',
+      mutation: signUpMutation,
+      variables: {
+        name, email, password,
+      },
+    }).then((response) => {
+      const { onSubmitUser } = this.props;
+      localStorage.setItem('token', response.data.signup);
+      const decoded = jwtDecode(response.data.signup.split(' ')[1]);
+      const { _id } = decoded;
+      localStorage.setItem('userId', _id);
+      localStorage.setItem('userName', decoded.name);
+      onSubmitUser(decoded);
+      this.setState({
+        redirectFlag: true,
+      });
+    })
+      .catch(() => {
+        this.setState({
+          invalidRegisterFlag: true,
+        });
+      });
+    /* axios.post('http://localhost:3001/register', data)
       .then((response) => {
         const { onSubmitUser } = this.props;
         localStorage.setItem('token', response.data);
@@ -79,7 +104,7 @@ class Register extends Component {
         this.setState({
           invalidRegisterFlag: true,
         });
-      });
+      }); */
   }
 
   render() {

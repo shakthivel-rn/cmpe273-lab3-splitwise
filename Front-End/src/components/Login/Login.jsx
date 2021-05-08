@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import { propTypes } from 'react-bootstrap/esm/Image';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import apolloClient from '../../graphql/apolloclient/client';
-import loginMutation from '../../graphql/mutations/login';
+import { loginMutation } from '../../graphql/mutations/user';
 import Navigationbar from '../Navigationbar/Navigationbar';
 
 class Login extends Component {

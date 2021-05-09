@@ -8,7 +8,7 @@ const { checkAuth } = require('../Utils/passport');
 
 const router = express.Router();
 
-router.post('/', checkAuth, async (req, res) => {
+router.post('/', async (req, res) => {
   const creatorUser = await Users.findOne({ _id: req.body.userId });
   const group = await Groups.findOne({ _id: req.body.groupId });
   const otherUsers = await Users.find({ _id: group.groupMembers });
@@ -54,7 +54,7 @@ router.post('/', checkAuth, async (req, res) => {
       newOtherUser.transactions.push.apply(otherUser.transactions, transactionIds);
       newOtherUser.save();
     });
-    res.status(200);
+    res.status(200).send();
   } else {
     res.status(401);
   }

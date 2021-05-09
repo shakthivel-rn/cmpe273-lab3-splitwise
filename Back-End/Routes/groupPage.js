@@ -17,6 +17,7 @@ router.get('/', async (req, res) => {
   }));
   const uniq = new Set(result.map((e) => JSON.stringify(e)));
   const uniqueResult = Array.from(uniq).map((e) => JSON.parse(e));
+  console.log(uniqueResult);
   res.send(uniqueResult);
 });
 

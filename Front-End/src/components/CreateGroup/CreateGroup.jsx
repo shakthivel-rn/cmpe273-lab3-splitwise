@@ -10,7 +10,7 @@ import {
 import axios from 'axios';
 import { connect } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
-import createGroupMutation from '../../graphql/mutations/group';
+import { createGroupMutation } from '../../graphql/mutations/group';
 import apolloClient from '../../graphql/apolloclient/client';
 import Navigationbar from '../Navigationbar/Navigationbar';
 

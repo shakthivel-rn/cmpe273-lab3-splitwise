@@ -6,4 +6,10 @@ mutation CreateGroup($userId: String, $memberEmails: [String], $groupName: Strin
 }
 `;
 
-export default createGroupMutation;
+const createExpenseMutation = gql`
+mutation CreateExpense($userId: String, $groupId: String, $expenseDescription: String, $expenseAmount: String) {
+    createexpense(userId: $userId, groupId: $groupId, expenseDescription: $expenseDescription, expenseAmount: $expenseAmount)
+}
+`;
+
+export { createGroupMutation, createExpenseMutation };

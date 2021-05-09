@@ -51,6 +51,7 @@ class RecentActivity extends Component {
       variables: {
         userId, pageNumber, pageSize, order, selectedGroup,
       },
+      fetchPolicy: 'no-cache',
     });
     const { recentactivitylogs } = this.state;
     this.setState({
@@ -90,6 +91,7 @@ class RecentActivity extends Component {
       variables: {
         userId, pageNumber, pageSize, order, selectedGroup,
       },
+      fetchPolicy: 'no-cache',
     });
     this.setState({
       recentactivitylogs: [...recentActivityData.data.recentactivitydata],
@@ -116,6 +118,7 @@ class RecentActivity extends Component {
       variables: {
         userId, pageNumber, pageSize, order, selectedGroup,
       },
+      fetchPolicy: 'no-cache',
     });
     this.setState({
       recentactivitylogs: [...recentActivityData.data.recentactivitydata],
@@ -143,6 +146,7 @@ class RecentActivity extends Component {
       variables: {
         userId, pageNumber, pageSize, order, selectedGroup,
       },
+      fetchPolicy: 'no-cache',
     });
     this.setState({
       recentactivitylogs: [...recentActivityData.data.recentactivitydata],
@@ -174,6 +178,7 @@ class RecentActivity extends Component {
       variables: {
         userId, pageNumber, pageSize, order, selectedGroup,
       },
+      fetchPolicy: 'no-cache',
     });
     this.setState({
       recentactivitylogs: [...recentActivityData.data.recentactivitydata],

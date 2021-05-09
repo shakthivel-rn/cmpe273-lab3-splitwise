@@ -57,7 +57,10 @@ class GroupPage extends Component {
 
   async componentDidMount() {
     const { userId, groupName } = this.state;
-    const groupData = await apolloClient.query({ operationName: 'getgroupdata', query: getGroupDataQuery, variables: { userId, groupName } });
+    const groupData = await apolloClient.query({
+      operationName: 'getgroupdata', query: getGroupDataQuery, variables: { userId, groupName }, fetchPolicy: 'no-cache',
+    });
+    console.log(groupData);
     this.setState({
       groupDatas: [...groupData.data.groupdata],
       fadeFlag: true,
@@ -73,7 +76,9 @@ class GroupPage extends Component {
   async componentDidUpdate(prevProps, prevState) {
     const { userId, groupName } = this.state;
     if (groupName !== prevState.groupName) {
-      const groupData = await apolloClient.query({ operationName: 'getgroupdata', query: getGroupDataQuery, variables: { userId, groupName } });
+      const groupData = await apolloClient.query({
+        operationName: 'getgroupdata', query: getGroupDataQuery, variables: { userId, groupName }, fetchPolicy: 'no-cache',
+      });
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         groupDatas: [...groupData.data.groupdata],
@@ -91,7 +96,9 @@ class GroupPage extends Component {
 
   async getGroupDetails() {
     const { userId, groupName } = this.state;
-    const groupData = await apolloClient.query({ operationName: 'getgroupdata', query: getGroupDataQuery, variables: { userId, groupName } });
+    const groupData = await apolloClient.query({
+      operationName: 'getgroupdata', query: getGroupDataQuery, variables: { userId, groupName }, fetchPolicy: 'no-cache',
+    });
     this.setState({
       groupDatas: [...groupData.data.groupdata],
       fadeFlag: true,
@@ -104,7 +111,9 @@ class GroupPage extends Component {
   async getExpenseDetails(expenseId) {
     const { userId, groupName } = this.state;
     const { onGetExpenseDetails, onGetComments } = this.props;
-    const expenseData = await apolloClient.query({ operationName: 'getexpensedata', query: getExpenseDataQuery, variables: { userId, groupName, expenseId } });
+    const expenseData = await apolloClient.query({
+      operationName: 'getexpensedata', query: getExpenseDataQuery, variables: { userId, groupName, expenseId }, fetchPolicy: 'no-cache',
+    });
     const response = await axios.get('http://localhost:3001/groupPage/getComments', { params: { userId, expenseId } });
     this.setState({
       expenseDatas: [...expenseData.data.expensedata],
@@ -333,6 +342,7 @@ ${comment.commentDetails}  `}
                         </Modal.Header>
                         <Modal.Body>
                           <AddExpenseForm
+                            groupName={groupName}
                             groupId={groupId}
                             getGroupDetails={this.getGroupDetails}
                           />

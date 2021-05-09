@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import '../../App.css';
@@ -8,15 +9,19 @@ import {
   Button, Form,
 } from 'react-bootstrap';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import { createExpenseMutation } from '../../graphql/mutations/group';
+import apolloClient from '../../graphql/apolloclient/client';
+import { getGroupDataQuery } from '../../graphql/queries/groupPage';
 
 class AddExpenseForm extends Component {
   constructor(props) {
     super(props);
     const { userIdRedux } = props;
-    const { groupId, getGroupDetails } = props;
+    const { groupId, getGroupDetails, groupName } = props;
     this.state = {
       userId: userIdRedux,
       groupId,
+      groupName,
       getGroupDetails,
       expenseDescription: '',
       expenseAmount: 0,
@@ -45,18 +50,17 @@ class AddExpenseForm extends Component {
       userId,
     } = this.state;
     const {
-      groupId, expenseDescription, expenseAmount, getGroupDetails,
+      groupId, groupName, expenseDescription, expenseAmount, getGroupDetails,
     } = this.state;
     // userId = Number(userId);
-    const data = {
-      userId,
-      groupId,
-      expenseDescription,
-      expenseAmount,
-    };
     axios.defaults.withCredentials = true;
-    axios.post('http://localhost:3001/createExpense', data)
-      .then(getGroupDetails)
+    apolloClient.mutate({
+      operationName: 'createexpense',
+      mutation: createExpenseMutation,
+      variables: {
+        userId, groupId, expenseDescription, expenseAmount,
+      },
+    }).then(getGroupDetails)
       .catch(() => {
         this.setState({
           membersNotAcceptedFlag: true,

@@ -46,6 +46,7 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 const userId = args.userId;
                 const groupName = args.groupName;
+                console.log('Group');
                 return axios.get('http://localhost:3001/groupPage', { params: { userId, groupName } })
                     .then(res => res.data)
             }
@@ -149,6 +150,29 @@ const RootMutation = new GraphQLObjectType({
                     groupName
                 }
                 return axios.post('http://localhost:3001/createGroup', data)
+                .then(res => res.data);
+            }
+        },
+        createexpense: {
+            type: GraphQLString,
+            args:{
+                userId: {type: GraphQLString},
+                groupId: {type: GraphQLString},
+                expenseDescription: {type: GraphQLString},
+                expenseAmount: {type: GraphQLString}
+            },
+            resolve(parent, args) {
+                const userId = args.userId;
+                const groupId = args.groupId;
+                const expenseDescription = args.expenseDescription;
+                const expenseAmount = args.expenseAmount;
+                const data = {
+                    userId,
+                    groupId,
+                    expenseDescription,
+                    expenseAmount
+                }
+                return axios.post('http://localhost:3001/createExpense', data)
                 .then(res => res.data);
             }
         }

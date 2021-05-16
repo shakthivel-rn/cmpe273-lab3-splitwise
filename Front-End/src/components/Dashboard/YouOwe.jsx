@@ -8,7 +8,7 @@ import {
   ListGroup, Fade,
 } from 'react-bootstrap';
 import apolloClient from '../../graphql/apolloclient/client';
-import { getYouOweDataQuery } from '../../graphql/queries/dashboard';
+import { getYouOweDataQuery } from '../../graphql/queries/dashboardPage';
 
 class YouOwe extends Component {
   constructor(props) {

@@ -7,7 +7,7 @@ const { checkAuth } = require('../Utils/passport');
 
 const router = express.Router();
 
-router.get('/', checkAuth, async (req, res) => {
+router.get('/', async (req, res) => {
   const allUsers = await Users.find({});
   const allUsersNames = {};
   allUsers.forEach((allUser) => {

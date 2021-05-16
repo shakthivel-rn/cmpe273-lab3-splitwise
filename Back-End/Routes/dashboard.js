@@ -12,7 +12,7 @@ router.get('/sample', checkAuth, (req, res) => {
   res.send('You are authorized');
 });
 
-router.get('/getGroupNames', checkAuth, async (req, res) => {
+router.get('/getGroupNames', async (req, res) => {
   const user = await Users.findOne({ _id: req.query.userId });
   const groupIds = user.joinedGroups;
   const memberGroups = await Groups.find({ _id: groupIds }, { name: 1 });

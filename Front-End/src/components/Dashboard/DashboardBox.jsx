@@ -11,7 +11,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import apolloClient from '../../graphql/apolloclient/client';
-import { getDashboardDataQuery } from '../../graphql/queries/dashboard';
+import { getDashboardDataQuery } from '../../graphql/queries/dashboardPage';
 
 function Dashboardbox(props) {
   const [userId] = useState(props.userIdRedux);

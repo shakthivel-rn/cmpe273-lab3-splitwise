@@ -12,6 +12,8 @@ import { connect } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import Navigationbar from '../Navigationbar/Navigationbar';
 import DashboardSideBar from '../Dashboard/DashboardSideBar';
+import apolloClient from '../../graphql/apolloclient/client';
+import { getJoinedGroupDataQuery, getInvitedGroupDataQuery } from '../../graphql/queries/myGroupsPage';
 
 class MyGroups extends Component {
   constructor(props) {
@@ -74,17 +76,23 @@ class MyGroups extends Component {
   async getMyGroupDetails() {
     const { userId } = this.state;
     const { onGetJoinedGroups, onGetInvitedGroups } = this.props;
-    const resGroupNames = await axios.get('http://localhost:3001/dashboard/getGroupNames', { params: { userId } });
-    this.setState({
-      groupList: [...resGroupNames.data],
+    // const resGroupNames = await axios.get('http://localhost:3001/dashboard/getGroupNames', { params: { userId } });
+    const joinedGroup = await apolloClient.query({
+      operationName: 'getjoinedgroupdata', query: getJoinedGroupDataQuery, variables: { userId }, fetchPolicy: 'no-cache',
     });
-    onGetJoinedGroups(resGroupNames.data);
-    const resGroupInvites = await axios.get('http://localhost:3001/myGroups', { params: { userId } });
     this.setState({
-      inviteList: [...resGroupInvites.data],
+      groupList: [...joinedGroup.data.joinedgroupdata],
+    });
+    onGetJoinedGroups(joinedGroup.data.joinedgroupdata);
+    // const resGroupInvites = await axios.get('http://localhost:3001/myGroups', { params: { userId } });
+    const invitedGroup = await apolloClient.query({
+      operationName: 'getinvitedgroupdata', query: getInvitedGroupDataQuery, variables: { userId }, fetchPolicy: 'no-cache',
+    });
+    this.setState({
+      inviteList: [...invitedGroup.data.invitedgroupdata],
       fadeFlag: true,
     });
-    onGetInvitedGroups(resGroupInvites.data);
+    onGetInvitedGroups(invitedGroup.data.invitedgroupdata);
   }
 
   render() {

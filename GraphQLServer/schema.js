@@ -60,6 +60,24 @@ const YouAreOwedData = new GraphQLObjectType({
     })
 });
 
+const JoinedGroupData = new GraphQLObjectType({
+    name: 'JoinedGroupData',
+    fields: () => ({
+        _id: { type: GraphQLString },
+        name: { type: GraphQLString },
+    })
+});
+
+const InvitedGroupData = new GraphQLObjectType({
+    name: 'InvitedGroupData',
+    fields: () => ({
+        groupId: { type: GraphQLString },
+        groupName: { type: GraphQLString },
+        creatorUser: { type: GraphQLString },
+        creatorId: { type: GraphQLString },
+    })
+});
+
 const RootQuery = new GraphQLObjectType({
     name: 'RootQuery',
     fields: {
@@ -144,7 +162,27 @@ const RootQuery = new GraphQLObjectType({
                 const userId = args.userId;
                 return axios.get('http://localhost:3001/dashboard/getIndividualPaidAmount', { params: { userId } }).then(res => res.data)
             }
-        }
+        },
+        joinedgroupdata: {
+            type: new GraphQLList(JoinedGroupData),
+            args: {
+                userId: { type: GraphQLString },
+            },
+            resolve(parent, args) {
+                const userId = args.userId;
+                return axios.get('http://localhost:3001/dashboard/getGroupNames', { params: { userId } }).then(res => res.data)
+            }
+        },
+        invitedgroupdata: {
+            type: new GraphQLList(InvitedGroupData),
+            args: {
+                userId: { type: GraphQLString },
+            },
+            resolve(parent, args) {
+                const userId = args.userId;
+                return axios.get('http://localhost:3001/myGroups', { params: { userId } }).then(res => res.data)
+            }
+        },
     }
 })
 

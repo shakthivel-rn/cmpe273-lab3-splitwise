@@ -2,11 +2,13 @@
 import React, { Component } from 'react';
 import '../../App.css';
 import './YouAreOwed.css';
-import axios from 'axios';
+// import axios from 'axios';
 import { connect } from 'react-redux';
 import {
   ListGroup, Fade,
 } from 'react-bootstrap';
+import apolloClient from '../../graphql/apolloclient/client';
+import { getYouAreOwedData } from '../../graphql/queries/dashboard';
 
 class YouAreOwed extends Component {
   constructor(props) {
@@ -21,10 +23,13 @@ class YouAreOwed extends Component {
 
   async componentDidMount() {
     const { userId } = this.state;
-    const res = await axios.get('http://localhost:3001/dashboard/getIndividualPaidAmount', { params: { userId } });
+    // const res = await axios.get('http://localhost:3001/dashboard/getIndividualPaidAmount', { params: { userId } });
+    const youAreOwedData = await apolloClient.query({
+      operationName: 'getyouareoweddata', query: getYouAreOwedData, variables: { userId }, fetchPolicy: 'no-cache',
+    });
     const { owed } = this.state;
     this.setState({
-      owed: owed.concat(res.data),
+      owed: owed.concat(youAreOwedData.data.youareoweddata),
       fadeFlag: true,
     });
   }

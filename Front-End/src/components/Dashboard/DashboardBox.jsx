@@ -10,6 +10,8 @@ import {
 import axios from 'axios';
 import { connect } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import apolloClient from '../../graphql/apolloclient/client';
+import { getDashboardDataQuery } from '../../graphql/queries/dashboard';
 
 function Dashboardbox(props) {
   const [userId] = useState(props.userIdRedux);
@@ -28,26 +30,34 @@ function Dashboardbox(props) {
     onGetSettleUserNames(res.data);
   };
   const getPaidAndOwedAmount = async () => {
-    const res = await axios.get('http://localhost:3001/dashboard/getTotalPaidAndOwedAmount', { params: { userId } });
-    setYouOwe(res.data.totalOwedAmount);
-    setYouAreOwed(res.data.totalPaidAmount);
-    const totalBalanceValue = res.data.totalPaidAmount - res.data.totalOwedAmount;
+    // const res = await axios.get('http://localhost:3001/dashboard/getTotalPaidAndOwedAmount', { params: { userId } });
+    const dashboardData = await apolloClient.query({
+      operationName: 'getdashboarddata', query: getDashboardDataQuery, variables: { userId }, fetchPolicy: 'no-cache',
+    });
+    setYouOwe(dashboardData.data.dashboarddata[0].totalOwedAmount);
+    setYouAreOwed(dashboardData.data.dashboarddata[0].totalPaidAmount);
+    const totalBalanceValue = dashboardData.data.dashboarddata[0].totalPaidAmount
+    - dashboardData.data.dashboarddata[0].totalOwedAmount;
     setTotalBalance(totalBalanceValue.toFixed(2));
     setFadeFlag(true);
     const { onGetTotalAmount } = props;
-    onGetTotalAmount(res.data);
+    onGetTotalAmount(dashboardData.data.dashboarddata[0]);
   };
   useEffect(() => {
     // eslint-disable-next-line no-shadow
     const getPaidAndOwedAmount = async () => {
-      const res = await axios.get('http://localhost:3001/dashboard/getTotalPaidAndOwedAmount', { params: { userId } });
-      setYouOwe(res.data.totalOwedAmount);
-      setYouAreOwed(res.data.totalPaidAmount);
-      const totalBalanceValue = res.data.totalPaidAmount - res.data.totalOwedAmount;
+      // const res = await axios.get('http://localhost:3001/dashboard/getTotalPaidAndOwedAmount', { params: { userId } });
+      const dashboardData = await apolloClient.query({
+        operationName: 'getdashboarddata', query: getDashboardDataQuery, variables: { userId }, fetchPolicy: 'no-cache',
+      });
+      setYouOwe(dashboardData.data.dashboarddata[0].totalOwedAmount);
+      setYouAreOwed(dashboardData.data.dashboarddata[0].totalPaidAmount);
+      const totalBalanceValue = dashboardData.data.dashboarddata[0].totalPaidAmount
+      - dashboardData.data.dashboarddata[0].totalOwedAmount;
       setTotalBalance(totalBalanceValue.toFixed(2));
       setFadeFlag(true);
       const { onGetTotalAmount } = props;
-      onGetTotalAmount(res.data);
+      onGetTotalAmount(dashboardData.data.dashboarddata[0]);
     };
     // eslint-disable-next-line no-shadow
     const getFriendsDetails = async () => {

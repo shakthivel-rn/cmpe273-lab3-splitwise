@@ -19,7 +19,7 @@ router.get('/getGroupNames', checkAuth, async (req, res) => {
   res.send(memberGroups);
 });
 
-router.get('/getTotalPaidAndOwedAmount', checkAuth, async (req, res) => {
+router.get('/getTotalPaidAndOwedAmount', async (req, res) => {
   const user = await Users.findOne({ _id: req.query.userId });
   const transactionIds = user.transactions;
   const transactions = await Transactions.find({ _id: transactionIds });
@@ -37,10 +37,10 @@ router.get('/getTotalPaidAndOwedAmount', checkAuth, async (req, res) => {
   });
   totalPaidAmount = totalPaidAmount.toFixed(2);
   totalOwedAmount = totalOwedAmount.toFixed(2);
-  res.send({ totalPaidAmount, totalOwedAmount });
+  res.send([{ totalPaidAmount, totalOwedAmount }]);
 });
 
-router.get('/getIndividualOwedAmount', checkAuth, async (req, res) => {
+router.get('/getIndividualOwedAmount', async (req, res) => {
   const user = await Users.findOne({ _id: req.query.userId });
   const allUsers = await Users.find({});
   const allUsersNames = {};
@@ -75,7 +75,7 @@ router.get('/getIndividualOwedAmount', checkAuth, async (req, res) => {
   res.send(result);
 });
 
-router.get('/getIndividualPaidAmount', checkAuth, async (req, res) => {
+router.get('/getIndividualPaidAmount', async (req, res) => {
   const user = await Users.findOne({ _id: req.query.userId });
   const allUsers = await Users.find({});
   const allUsersNames = {};

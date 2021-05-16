@@ -60,7 +60,6 @@ class GroupPage extends Component {
     const groupData = await apolloClient.query({
       operationName: 'getgroupdata', query: getGroupDataQuery, variables: { userId, groupName }, fetchPolicy: 'no-cache',
     });
-    console.log(groupData);
     this.setState({
       groupDatas: [...groupData.data.groupdata],
       fadeFlag: true,

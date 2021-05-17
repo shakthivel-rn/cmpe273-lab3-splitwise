@@ -2,11 +2,11 @@
 const Users = require('../../ModelsMongoDB/Users');
 const Groups = require('../../ModelsMongoDB/Groups');
 
-async function handle_request(message, callback) {
-  const user = await Users.findOne({ _id: message.userId });
+async function getJoinedGroupData(userId) {
+  const user = await Users.findOne({ _id: userId });
   const groupIds = user.joinedGroups;
   const memberGroups = await Groups.find({ _id: groupIds }, { name: 1 });
-  callback(null, memberGroups);
+  return memberGroups;
 }
 
-exports.handle_request = handle_request;
+exports.getJoinedGroupData = getJoinedGroupData;

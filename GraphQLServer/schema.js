@@ -3,6 +3,11 @@ const { GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLFloat, GraphQLList,
 const { getGroupData } = require('./Handlers/GroupPage/getGroupData');
 const { getExpenseData } = require('./Handlers/GroupPage/getExpenseDetails');
 const { getRecentActivityData } = require('./Handlers/RecentActivity/getRecentActivity');
+const { getDashboardData } = require('./Handlers/Dashboard/getDashboardBox');
+const { getYouOweData } = require('./Handlers/Dashboard/getYouOwe');
+const { getYouAreOwedData } = require('./Handlers/Dashboard/getYouAreOwed');
+const { getJoinedGroupData } = require('./Handlers/Dashboard/getGroupNames');
+const { getInvitedGroupData } = require('./Handlers/MyGroups/getInvitedGroups');
 
 const GroupData = new GraphQLObjectType({
     name: 'GroupData',
@@ -135,7 +140,7 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve(parent, args) {
                 const userId = args.userId;
-                return axios.get('http://localhost:3001/dashboard/getTotalPaidAndOwedAmount', { params: { userId } }).then(res => res.data)
+                return getDashboardData(userId)
             }
         },
         youowedata: {
@@ -145,7 +150,7 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve(parent, args) {
                 const userId = args.userId;
-                return axios.get('http://localhost:3001/dashboard/getIndividualOwedAmount', { params: { userId } }).then(res => res.data)
+                return getYouOweData(userId)
             }
         },
         youareoweddata: {
@@ -155,7 +160,7 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve(parent, args) {
                 const userId = args.userId;
-                return axios.get('http://localhost:3001/dashboard/getIndividualPaidAmount', { params: { userId } }).then(res => res.data)
+                return getYouAreOwedData(userId)
             }
         },
         joinedgroupdata: {
@@ -165,7 +170,7 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve(parent, args) {
                 const userId = args.userId;
-                return axios.get('http://localhost:3001/dashboard/getGroupNames', { params: { userId } }).then(res => res.data)
+                return getJoinedGroupData(userId)
             }
         },
         invitedgroupdata: {
@@ -175,7 +180,7 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve(parent, args) {
                 const userId = args.userId;
-                return axios.get('http://localhost:3001/myGroups', { params: { userId } }).then(res => res.data)
+                return getInvitedGroupData(userId)
             }
         },
     }

@@ -3,8 +3,8 @@
 const Users = require('../../ModelsMongoDB/Users');
 const Transactions = require('../../ModelsMongoDB/Transactions');
 
-async function handle_request(message, callback) {
-  const user = await Users.findOne({ _id: message.userId });
+async function getYouAreOwedData(userId) {
+  const user = await Users.findOne({ _id: userId });
   const allUsers = await Users.find({});
   const allUsersNames = {};
   allUsers.forEach((allUser) => {
@@ -35,7 +35,7 @@ async function handle_request(message, callback) {
     owedUserName: allUsersNames[individualPaidsAmount._id.owedUserId],
     individualPaidAmount: individualPaidsAmount.total,
   }));
-  callback(null, result);
+  return result;
 }
 
-exports.handle_request = handle_request;
+exports.getYouAreOwedData = getYouAreOwedData;

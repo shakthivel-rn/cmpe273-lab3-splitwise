@@ -3,13 +3,13 @@
 const Users = require('../../ModelsMongoDB/Users');
 const Groups = require('../../ModelsMongoDB/Groups');
 
-async function handle_request(message, callback) {
+async function getInvitedGroupData(userId) {
   const allUsers = await Users.find({});
   const allUsersNames = {};
   allUsers.forEach((allUser) => {
     allUsersNames[allUser._id] = allUser.name;
   });
-  const user = await Users.findOne({ _id: message.userId });
+  const user = await Users.findOne({ _id: userId });
   const groupIds = user.invitedGroups;
   const pendingInvites = await Groups.find({ _id: groupIds });
   const inviteDetails = pendingInvites.map((pendingInvite) => ({
@@ -19,7 +19,7 @@ async function handle_request(message, callback) {
     creatorId: pendingInvite.creatorId,
   }
   ));
-  callback(null, inviteDetails);
+  return inviteDetails;
 }
 
-exports.handle_request = handle_request;
+exports.getInvitedGroupData = getInvitedGroupData;

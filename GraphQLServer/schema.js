@@ -1,5 +1,8 @@
 const { default: axios } = require('axios');
 const { GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLFloat, GraphQLList, GraphQLSchema } = require('graphql');
+const { getGroupData } = require('./Handlers/GroupPage/getGroupData');
+const { getExpenseData } = require('./Handlers/GroupPage/getExpenseDetails');
+const { getRecentActivityData } = require('./Handlers/RecentActivity/getRecentActivity');
 
 const GroupData = new GraphQLObjectType({
     name: 'GroupData',
@@ -90,9 +93,7 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 const userId = args.userId;
                 const groupName = args.groupName;
-                console.log('Group');
-                return axios.get('http://localhost:3001/groupPage', { params: { userId, groupName } })
-                    .then(res => res.data)
+                return getGroupData(userId, groupName)
             }
         },
         expensedata: {
@@ -106,8 +107,7 @@ const RootQuery = new GraphQLObjectType({
                 const userId = args.userId;
                 const groupName = args.groupName;
                 const expenseId = args.expenseId;
-                return axios.get('http://localhost:3001/groupPage/getExpenseDetail', { params: { userId, groupName, expenseId } })
-                    .then(res => res.data)
+                return getExpenseData(userId, groupName, expenseId)
             }
         },
         recentactivitydata: {
@@ -125,12 +125,7 @@ const RootQuery = new GraphQLObjectType({
                 const pageSize = args.pageSize;
                 const order = args.order;
                 const selectedGroup = args.selectedGroup;
-                return axios.get('http://localhost:3001/recentActivity', {
-                    params: {
-                        userId, pageNumber, pageSize, order, selectedGroup,
-                    },
-                })
-                    .then(res => res.data)
+                return getRecentActivityData(userId, pageNumber, pageSize, order, selectedGroup)
             }
         },
         dashboarddata: {

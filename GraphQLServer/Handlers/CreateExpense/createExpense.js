@@ -5,15 +5,15 @@ const Groups = require('../../ModelsMongoDB/Groups');
 const Expenses = require('../../ModelsMongoDB/Expenses');
 const Transactions = require('../../ModelsMongoDB/Transactions');
 
-async function handle_request(message, callback) {
-  const creatorUser = await Users.findOne({ _id: message.userId });
-  const group = await Groups.findOne({ _id: message.groupId });
+async function createExpense(userId, groupId, expenseDescription, expenseAmount) {
+  const creatorUser = await Users.findOne({ _id: userId });
+  const group = await Groups.findOne({ _id: groupId });
   const otherUsers = await Users.find({ _id: group.groupMembers });
   if (group.groupMembers.length > 1) {
     const expenseModel = new Expenses({
       groupName: group.name,
-      expenseDescription: message.expenseDescription,
-      expenseAmount: message.expenseAmount,
+      expenseDescription: expenseDescription,
+      expenseAmount: expenseAmount,
     });
     const expense = await expenseModel.save();
     const transactions = group.groupMembers.map((groupMember) => {
@@ -21,11 +21,11 @@ async function handle_request(message, callback) {
         const transactionModel = new Transactions({
           groupName: group.name,
           expenseId: expense._id,
-          expenseDescription: message.expenseDescription,
-          expenseAmount: message.expenseAmount,
+          expenseDescription: expenseDescription,
+          expenseAmount: expenseAmount,
           paidUserId: creatorUser._id,
           owedUserId: groupMember._id,
-          splitAmount: (message.expenseAmount / group.groupMembers.length).toFixed(2),
+          splitAmount: (expenseAmount / group.groupMembers.length).toFixed(2),
           paymentStatus: true,
         });
         return transactionModel;
@@ -33,11 +33,11 @@ async function handle_request(message, callback) {
       const transactionModel = new Transactions({
         groupName: group.name,
         expenseId: expense._id,
-        expenseDescription: message.expenseDescription,
-        expenseAmount: message.expenseAmount,
+        expenseDescription: expenseDescription,
+        expenseAmount: expenseAmount,
         paidUserId: creatorUser._id,
         owedUserId: groupMember._id,
-        splitAmount: (message.expenseAmount / group.groupMembers.length).toFixed(2),
+        splitAmount: (expenseAmount / group.groupMembers.length).toFixed(2),
         paymentStatus: false,
       });
       return transactionModel;
@@ -51,10 +51,10 @@ async function handle_request(message, callback) {
       newOtherUser.transactions.push.apply(otherUser.transactions, transactionIds);
       newOtherUser.save();
     });
-    callback(null, 200);
+    return '200';
   } else {
-    callback(null, 401);
+    return '401';
   }
 }
 
-exports.handle_request = handle_request;
+exports.createExpense = createExpense;

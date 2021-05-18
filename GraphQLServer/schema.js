@@ -9,6 +9,11 @@ const { getYouAreOwedData } = require('./Handlers/Dashboard/getYouAreOwed');
 const { getJoinedGroupData } = require('./Handlers/Dashboard/getGroupNames');
 const { getInvitedGroupData } = require('./Handlers/MyGroups/getInvitedGroups');
 
+const { singUp } = require('./Handlers/User/register');
+const { login } = require('./Handlers/User/login');
+const { createGroup } = require('./Handlers/CreateGroup/createGroup');
+const { createExpense } = require('./Handlers/CreateExpense/createExpense');
+
 const GroupData = new GraphQLObjectType({
     name: 'GroupData',
     fields: () => ({
@@ -200,14 +205,7 @@ const RootMutation = new GraphQLObjectType({
                 const name = args.name;
                 const email = args.email;
                 const password = args.password;
-                console.log(name);
-                const data = {
-                    name,
-                    email,
-                    password
-                }
-                return axios.post('http://localhost:3001/register', data)
-                    .then(res => res.data);
+                return singUp(name, email, password)
             }
         },
         login: {
@@ -216,15 +214,12 @@ const RootMutation = new GraphQLObjectType({
                 email: { type: GraphQLString },
                 password: { type: GraphQLString }
             },
-            resolve(parent, args) {
+            async resolve(parent, args) {
                 const email = args.email;
                 const password = args.password;
-                const data = {
-                    email,
-                    password
-                }
-                return axios.post('http://localhost:3001/login', data)
-                    .then(res => res.data);
+                const result = await login(email, password);
+                console.log(result);
+                return result
             }
         },
         creategroup: {
@@ -238,13 +233,7 @@ const RootMutation = new GraphQLObjectType({
                 const userId = args.userId;
                 const memberEmails = args.memberEmails;
                 const groupName = args.groupName;
-                const data = {
-                    userId,
-                    memberEmails,
-                    groupName
-                }
-                return axios.post('http://localhost:3001/createGroup', data)
-                    .then(res => res.data);
+                return createGroup(userId, memberEmails, groupName)
             }
         },
         createexpense: {
@@ -266,8 +255,7 @@ const RootMutation = new GraphQLObjectType({
                     expenseDescription,
                     expenseAmount
                 }
-                return axios.post('http://localhost:3001/createExpense', data)
-                    .then(res => res.data);
+                return createExpense(userId, groupId, expenseDescription, expenseAmount)
             }
         }
     }

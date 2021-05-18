@@ -60,12 +60,15 @@ class AddExpenseForm extends Component {
       variables: {
         userId, groupId, expenseDescription, expenseAmount,
       },
-    }).then(getGroupDetails)
-      .catch(() => {
+    }).then((response) => {
+      if (response.data.createexpense === '200') {
+        getGroupDetails();
+      } else {
         this.setState({
           membersNotAcceptedFlag: true,
         });
-      });
+      }
+    });
   }
 
   render() {

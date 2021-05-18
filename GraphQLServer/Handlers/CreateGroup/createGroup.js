@@ -2,13 +2,13 @@
 const Users = require('../../ModelsMongoDB/Users');
 const Groups = require('../../ModelsMongoDB/Groups');
 
-async function handle_request(message, callback) {
-  const existingGroup = await Groups.findOne({ name: message.groupName });
+async function createGroup(userId, memberEmails, groupName) {
+  const existingGroup = await Groups.findOne({ name: groupName });
   if (existingGroup === null) {
-    const creatorUser = await Users.findOne({ _id: message.userId });
-    const otherUsers = await Users.find({ email: message.memberEmails });
+    const creatorUser = await Users.findOne({ _id: userId });
+    const otherUsers = await Users.find({ email: memberEmails });
     const newGroupModel = new Groups({
-      name: message.groupName,
+      name: groupName,
       creatorId: creatorUser._id,
     });
     newGroupModel.groupMembers.push(creatorUser._id);
@@ -19,10 +19,10 @@ async function handle_request(message, callback) {
       otherUser.invitedGroups.push(newGroup._id);
       otherUser.save();
     });
-    callback(null, 200);
+    return '200';
   } else {
-    callback(null, 400);
+    return '400';
   }
 }
 
-exports.handle_request = handle_request;
+exports.createGroup = createGroup;

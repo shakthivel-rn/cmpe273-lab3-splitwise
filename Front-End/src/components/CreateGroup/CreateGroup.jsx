@@ -77,39 +77,23 @@ class CreateGroup extends Component {
     const {
       memberEmails, groupName, userId,
     } = this.state;
-    /* const data = {
-      userId,
-      memberEmails,
-      groupName,
-    }; */
     apolloClient.mutate({
       operationName: 'creategroup',
       mutation: createGroupMutation,
       variables: {
         userId, memberEmails, groupName,
       },
-    }).then(() => {
-      this.setState({
-        groupCreatedFlag: true,
-      });
-    })
-      .catch(() => {
-        this.setState({
-          invalidGroupNameFlag: true,
-        });
-      });
-    /* axios.post('http://localhost:3001/createGroup', data)
-      .then(() => {
+    }).then((response) => {
+      if (response.data.creategroup === '200') {
         this.setState({
           groupCreatedFlag: true,
         });
-      })
-      .catch(() => {
+      } else {
         this.setState({
           invalidGroupNameFlag: true,
         });
-      }); */
-
+      }
+    });
     const imageData = new FormData();// If file selected
     const { selectedFile } = this.state;
     if (selectedFile) {

@@ -7,7 +7,6 @@ import {
   Container, Row, Col, Figure, Fade,
 } from 'react-bootstrap';
 
-import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
@@ -53,11 +52,6 @@ class Login extends Component {
   submitLogin = (e) => {
     e.preventDefault();
     const { email, password } = this.state;
-    /* const data = {
-      email,
-      password,
-    }; */
-    axios.defaults.withCredentials = true;
     apolloClient.mutate({
       operationName: 'login',
       mutation: loginMutation,
@@ -66,8 +60,8 @@ class Login extends Component {
       },
     }).then((response) => {
       const { onSubmitUser } = this.props;
-      localStorage.setItem('token', response.data.login);
       const decoded = jwtDecode(response.data.login.split(' ')[1]);
+      localStorage.setItem('token', response.data.login);
       const { _id, name } = decoded;
       localStorage.setItem('userId', _id);
       localStorage.setItem('userName', name);
@@ -81,24 +75,6 @@ class Login extends Component {
           invalidLoginFlag: true,
         });
       });
-    /* axios.post('http://localhost:3001/login', data)
-      .then((response) => {
-        const { onSubmitUser } = this.props;
-        localStorage.setItem('token', response.data);
-        const decoded = jwtDecode(response.data.split(' ')[1]);
-        const { _id, name } = decoded;
-        localStorage.setItem('userId', _id);
-        localStorage.setItem('userName', name);
-        onSubmitUser(decoded);
-        this.setState({
-          redirectFlag: true,
-        });
-      })
-      .catch(() => {
-        this.setState({
-          invalidLoginFlag: true,
-        });
-      }); */
   }
 
   render() {

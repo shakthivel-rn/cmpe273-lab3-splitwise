@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../../App.css';
 import './Register.css';
-import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -58,12 +57,6 @@ class Register extends Component {
   submitRegister = (e) => {
     e.preventDefault();
     const { name, email, password } = this.state;
-    /* const data = {
-      name,
-      email,
-      password,
-    }; */
-    axios.defaults.withCredentials = true;
     apolloClient.mutate({
       operationName: 'signup',
       mutation: signUpMutation,
@@ -72,8 +65,8 @@ class Register extends Component {
       },
     }).then((response) => {
       const { onSubmitUser } = this.props;
-      localStorage.setItem('token', response.data.signup);
       const decoded = jwtDecode(response.data.signup.split(' ')[1]);
+      localStorage.setItem('token', response.data.signup);
       const { _id } = decoded;
       localStorage.setItem('userId', _id);
       localStorage.setItem('userName', decoded.name);
@@ -87,24 +80,6 @@ class Register extends Component {
           invalidRegisterFlag: true,
         });
       });
-    /* axios.post('http://localhost:3001/register', data)
-      .then((response) => {
-        const { onSubmitUser } = this.props;
-        localStorage.setItem('token', response.data);
-        const decoded = jwtDecode(response.data.split(' ')[1]);
-        const { _id } = decoded;
-        localStorage.setItem('userId', _id);
-        localStorage.setItem('userName', decoded.name);
-        onSubmitUser(decoded);
-        this.setState({
-          redirectFlag: true,
-        });
-      })
-      .catch(() => {
-        this.setState({
-          invalidRegisterFlag: true,
-        });
-      }); */
   }
 
   render() {

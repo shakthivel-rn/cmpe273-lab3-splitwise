@@ -21,6 +21,7 @@ const { editLanguage } = require('./Handlers/ProfilePage/editLanguage');
 const { editDefaultCurrency } = require('./Handlers/ProfilePage/editDefaultCurrency');
 const { editTimeZone } = require('./Handlers/ProfilePage/editTimeZone');
 const { settleAmount } = require('./Handlers/Dashboard/settleAmount');
+const { acceptGroupInvite } = require('./Handlers/MyGroups/acceptGroupInvite');
 
 const GroupData = new GraphQLObjectType({
     name: 'GroupData',
@@ -370,6 +371,18 @@ const RootMutation = new GraphQLObjectType({
                 const userId = args.userId;
                 const friendId = args.friendId;
                 return settleAmount(userId, friendId);
+            }
+        },
+        acceptGroupInvite: {
+            type: GraphQLString,
+            args: {
+                userId: { type: GraphQLString },
+                groupId: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                const userId = args.userId;
+                const groupId = args.groupId;
+                return acceptGroupInvite(userId, groupId);
             }
         }
     }

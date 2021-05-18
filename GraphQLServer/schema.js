@@ -20,6 +20,7 @@ const { editPhoneNumber } = require('./Handlers/ProfilePage/editPhoneNumber');
 const { editLanguage } = require('./Handlers/ProfilePage/editLanguage');
 const { editDefaultCurrency } = require('./Handlers/ProfilePage/editDefaultCurrency');
 const { editTimeZone } = require('./Handlers/ProfilePage/editTimeZone');
+const { settleAmount } = require('./Handlers/Dashboard/settleAmount');
 
 const GroupData = new GraphQLObjectType({
     name: 'GroupData',
@@ -357,6 +358,18 @@ const RootMutation = new GraphQLObjectType({
                 const userId = args.userId;
                 const timezone = args.timezone;
                 return editTimeZone(userId, timezone);
+            }
+        },
+        settleAmount: {
+            type: GraphQLString,
+            args: {
+                userId: { type: GraphQLString },
+                friendId: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                const userId = args.userId;
+                const friendId = args.friendId;
+                return settleAmount(userId, friendId);
             }
         }
     }

@@ -1,16 +1,16 @@
 /* eslint-disable camelcase */
 const Transactions = require('../../ModelsMongoDB/Transactions');
 
-async function handle_request(message, callback) {
+async function settleAmount(userId, friendId) {
   const transactions = await Transactions
-    .find({ owedUserId: message.userId, paidUserId: message.friendId });
+    .find({ owedUserId: userId, paidUserId: friendId });
   transactions.forEach((transaction) => {
     const newTransaction = transaction;
     newTransaction.paymentStatus = true;
     newTransaction.time = Date.now();
     newTransaction.save();
   });
-  callback(null, 200);
+  return '200';
 }
 
-exports.handle_request = handle_request;
+exports.settleAmount = settleAmount;

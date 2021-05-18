@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import apolloClient from '../../graphql/apolloclient/client';
 import { getDashboardDataQuery } from '../../graphql/queries/dashboardPage';
+import settleAmountMutation from '../../graphql/mutations/settleamount';
 
 function Dashboardbox(props) {
   const [userId] = useState(props.userIdRedux);
@@ -37,7 +38,7 @@ function Dashboardbox(props) {
     setYouOwe(dashboardData.data.dashboarddata[0].totalOwedAmount);
     setYouAreOwed(dashboardData.data.dashboarddata[0].totalPaidAmount);
     const totalBalanceValue = dashboardData.data.dashboarddata[0].totalPaidAmount
-    - dashboardData.data.dashboarddata[0].totalOwedAmount;
+      - dashboardData.data.dashboarddata[0].totalOwedAmount;
     setTotalBalance(totalBalanceValue.toFixed(2));
     setFadeFlag(true);
     const { onGetTotalAmount } = props;
@@ -53,7 +54,7 @@ function Dashboardbox(props) {
       setYouOwe(dashboardData.data.dashboarddata[0].totalOwedAmount);
       setYouAreOwed(dashboardData.data.dashboarddata[0].totalPaidAmount);
       const totalBalanceValue = dashboardData.data.dashboarddata[0].totalPaidAmount
-      - dashboardData.data.dashboarddata[0].totalOwedAmount;
+        - dashboardData.data.dashboarddata[0].totalOwedAmount;
       setTotalBalance(totalBalanceValue.toFixed(2));
       setFadeFlag(true);
       const { onGetTotalAmount } = props;
@@ -71,11 +72,15 @@ function Dashboardbox(props) {
   }, [userId]);
 
   const onSettleUp = async (friendId) => {
-    const data = { userId, friendId };
-    await axios.post('http://localhost:3001/dashboard/settleAmount', data)
-      .then(() => {
-        setSettledBalanceFlag(true);
-      });
+    await apolloClient.mutate({
+      operationName: 'settleamount',
+      mutation: settleAmountMutation,
+      variables: {
+        userId, friendId,
+      },
+    }).then(() => {
+      setSettledBalanceFlag(true);
+    });
   };
 
   const friendsDetails = [];

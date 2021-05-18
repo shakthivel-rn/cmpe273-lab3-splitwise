@@ -1,10 +1,10 @@
 const Users = require('../../ModelsMongoDB/Users');
 
-async function handle_request(message, callback) {
-  const user = await Users.findOne({ _id: message.userId });
-  user.language = message.language;
+async function editLanguage(userId, language) {
+  const user = await Users.findOne({ _id: userId });
+  user.language = language;
   user.save();
-  callback(null, 200);
+  return '200';
 }
 
-exports.handle_request = handle_request;
+exports.editLanguage = editLanguage;

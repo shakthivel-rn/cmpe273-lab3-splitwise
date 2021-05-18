@@ -7,11 +7,16 @@ import { Redirect } from 'react-router';
 import {
   Container, Row, Col, Form, Button, Fade,
 } from 'react-bootstrap';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import Navigationbar from '../Navigationbar/Navigationbar';
 import ProfileImage from './ProfileImage';
+import apolloClient from '../../graphql/apolloclient/client';
+import {
+  editNameMutation, editEmailMutation, editPhoneNumberMutation,
+  editLanguageMutation, editDefaultCurrencyMutation, editTimeZoneMutation,
+} from '../../graphql/mutations/profilepage';
+import getUserDataQuery from '../../graphql/queries/profilePage';
 
 class Profilepage extends Component {
   constructor(props) {
@@ -46,15 +51,16 @@ class Profilepage extends Component {
 
   async componentDidMount() {
     const { userId } = this.state;
-    axios.defaults.headers.common.authorization = localStorage.getItem('token');
-    const res = await axios.get('http://localhost:3001/profilePage/getUserDetails', { params: { userId } });
+    const userData = await apolloClient.query({
+      operationName: 'getuserdata', query: getUserDataQuery, variables: { userId }, fetchPolicy: 'no-cache',
+    });
     this.setState({
-      name: res.data.name,
-      email: res.data.email,
-      phone: res.data.phoneNumber ? res.data.phoneNumber : 'Your Phonenumber',
-      defaultcurrency: res.data.defaultCurrency ? res.data.defaultCurrency : 'Choose Currency',
-      timezone: res.data.timezone ? res.data.timezone : 'Choose Timezone',
-      language: res.data.language ? res.data.language : 'Choose Language',
+      name: userData.data.userdata.name,
+      email: userData.data.userdata.email,
+      phone: userData.data.userdata.phoneNumber ? userData.data.userdata.phoneNumber : 'Your Phonenumber',
+      defaultcurrency: userData.data.userdata.defaultCurrency ? userData.data.userdata.defaultCurrency : 'Choose Currency',
+      timezone: userData.data.userdata.timezone ? userData.data.userdata.timezone : 'Choose Timezone',
+      language: userData.data.userdata.language ? userData.data.userdata.language : 'Choose Language',
       fadeFlag: true,
       submitFlag: false,
       errorFlag: false,
@@ -100,103 +106,104 @@ class Profilepage extends Component {
   editName = (e) => {
     e.preventDefault();
     const { name, userId } = this.state;
-    const data = {
-      name,
-      userId,
-    };
-    axios.defaults.withCredentials = true;
-    axios.put('http://localhost:3001/profilePage/editName', data)
-      .then(() => {
-        this.setState({
-          submitFlag: true,
-        });
+    apolloClient.mutate({
+      operationName: 'editname',
+      mutation: editNameMutation,
+      variables: {
+        userId, name,
+      },
+    }).then(() => {
+      this.setState({
+        submitFlag: true,
       });
+    });
   }
 
   editEmail = (e) => {
     e.preventDefault();
     const { email, userId } = this.state;
-    const data = {
-      email,
-      userId,
-    };
-    axios.defaults.withCredentials = true;
-    axios.put('http://localhost:3001/profilePage/editEmail', data)
-      .then(() => {
+    apolloClient.mutate({
+      operationName: 'editemail',
+      mutation: editEmailMutation,
+      variables: {
+        userId, email,
+      },
+    }).then((response) => {
+      if (response.data.editEmail === '200') {
         this.setState({
           submitFlag: true,
         });
-      })
-      .catch(() => {
+      } else {
         this.setState({
           errorFlag: true,
           errorMessage: 'Email ID already exists',
         });
-      });
+      }
+    });
   }
 
   editPhone = (e) => {
     e.preventDefault();
     const { phone, userId } = this.state;
-    const data = {
-      phone,
-      userId,
-    };
-    axios.defaults.withCredentials = true;
-    axios.put('http://localhost:3001/profilePage/editPhoneNumber', data)
-      .then(() => {
-        this.setState({
-          submitFlag: true,
-        });
+    apolloClient.mutate({
+      operationName: 'editphonenumber',
+      mutation: editPhoneNumberMutation,
+      variables: {
+        userId, phone,
+      },
+    }).then(() => {
+      this.setState({
+        submitFlag: true,
       });
+    });
   }
 
   editDefaultCurrency = (e) => {
     e.preventDefault();
     const { defaultcurrency, userId } = this.state;
-    const data = {
-      defaultcurrency,
-      userId,
-    };
-    axios.defaults.withCredentials = true;
-    axios.put('http://localhost:3001/profilePage/editDefaultCurrency', data)
-      .then(() => {
-        this.setState({
-          submitFlag: true,
-        });
+    apolloClient.mutate({
+      operationName: 'editdefaultcurrency',
+      mutation: editDefaultCurrencyMutation,
+      variables: {
+        userId, defaultcurrency,
+      },
+    }).then(() => {
+      this.setState({
+        submitFlag: true,
       });
+    });
   }
 
   editTimeZone = (e) => {
     e.preventDefault();
     const { timezone, userId } = this.state;
-    const data = {
-      timezone,
-      userId,
-    };
-    axios.defaults.withCredentials = true;
-    axios.put('http://localhost:3001/profilePage/editTimeZone', data)
-      .then(() => {
-        this.setState({
-          submitFlag: true,
-        });
+    apolloClient.mutate({
+      operationName: 'edittimezone',
+      mutation: editTimeZoneMutation,
+      variables: {
+        userId, timezone,
+      },
+    }).then(() => {
+      this.setState({
+        submitFlag: true,
       });
+    });
   }
 
   editLanguage = (e) => {
     e.preventDefault();
     const { language, userId } = this.state;
-    const data = {
-      language,
-      userId,
-    };
-    axios.defaults.withCredentials = true;
-    axios.put('http://localhost:3001/profilePage/editLanguage', data)
-      .then(() => {
-        this.setState({
-          submitFlag: true,
-        });
+    apolloClient.mutate({
+      operationName: 'editlanguage',
+      mutation: editLanguageMutation,
+      variables: {
+        userId, language,
+      },
+    }).then(() => {
+      this.setState({
+        submitFlag: true,
       });
+    });
   }
 
   render() {

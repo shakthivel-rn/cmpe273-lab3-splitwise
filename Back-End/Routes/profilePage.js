@@ -44,6 +44,7 @@ const profileImgUpload = multer({
 
 router.get('/getUserDetails', checkAuth, async (req, res) => {
   const user = await Users.findOne({ _id: req.query.userId });
+  console.log(user);
   res.send(user);
 });
 

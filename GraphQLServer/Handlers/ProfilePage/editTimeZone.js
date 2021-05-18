@@ -1,10 +1,10 @@
 const Users = require('../../ModelsMongoDB/Users');
 
-async function handle_request(message, callback) {
-  const user = await Users.findOne({ _id: message.userId });
-  user.timezone = message.timezone;
+async function editTimeZone(userId, timezone) {
+  const user = await Users.findOne({ _id: userId });
+  user.timezone = timezone;
   user.save();
-  callback(null, 200);
+  return '200';
 }
 
-exports.handle_request = handle_request;
+exports.editTimeZone = editTimeZone;

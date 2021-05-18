@@ -8,11 +8,18 @@ const { getYouOweData } = require('./Handlers/Dashboard/getYouOwe');
 const { getYouAreOwedData } = require('./Handlers/Dashboard/getYouAreOwed');
 const { getJoinedGroupData } = require('./Handlers/Dashboard/getGroupNames');
 const { getInvitedGroupData } = require('./Handlers/MyGroups/getInvitedGroups');
+const { getUserDetails } = require('./Handlers/ProfilePage/getUserDetails');
 
 const { singUp } = require('./Handlers/User/register');
 const { login } = require('./Handlers/User/login');
 const { createGroup } = require('./Handlers/CreateGroup/createGroup');
 const { createExpense } = require('./Handlers/CreateExpense/createExpense');
+const { editName } = require('./Handlers/ProfilePage/editName');
+const { editEmail } = require('./Handlers/ProfilePage/editEmail');
+const { editPhoneNumber } = require('./Handlers/ProfilePage/editPhoneNumber');
+const { editLanguage } = require('./Handlers/ProfilePage/editLanguage');
+const { editDefaultCurrency } = require('./Handlers/ProfilePage/editDefaultCurrency');
+const { editTimeZone } = require('./Handlers/ProfilePage/editTimeZone');
 
 const GroupData = new GraphQLObjectType({
     name: 'GroupData',
@@ -88,6 +95,18 @@ const InvitedGroupData = new GraphQLObjectType({
         groupName: { type: GraphQLString },
         creatorUser: { type: GraphQLString },
         creatorId: { type: GraphQLString },
+    })
+});
+
+const UserData = new GraphQLObjectType({
+    name: 'UserData',
+    fields: () => ({
+        name: { type: GraphQLString },
+        email: { type: GraphQLString },
+        phoneNumber: { type: GraphQLString },
+        language: { type: GraphQLString },
+        defaultCurrency: { type: GraphQLString },
+        timezone: { type: GraphQLString },
     })
 });
 
@@ -188,6 +207,16 @@ const RootQuery = new GraphQLObjectType({
                 return getInvitedGroupData(userId)
             }
         },
+        userdata: {
+            type: UserData,
+            args: {
+                userId: { type: GraphQLString },
+            },
+            resolve(parent, args) {
+                const userId = args.userId;
+                return getUserDetails(userId)
+            }
+        },
     }
 })
 
@@ -256,6 +285,78 @@ const RootMutation = new GraphQLObjectType({
                     expenseAmount
                 }
                 return createExpense(userId, groupId, expenseDescription, expenseAmount)
+            }
+        },
+        editName: {
+            type: GraphQLString,
+            args: {
+                userId: { type: GraphQLString },
+                name: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                const userId = args.userId;
+                const name = args.name;
+                return editName(userId, name);
+            }
+        },
+        editEmail: {
+            type: GraphQLString,
+            args: {
+                userId: { type: GraphQLString },
+                email: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                const userId = args.userId;
+                const email = args.email;
+                return editEmail(userId, email);
+            }
+        },
+        editPhoneNumber: {
+            type: GraphQLString,
+            args: {
+                userId: { type: GraphQLString },
+                phone: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                const userId = args.userId;
+                const phone = args.phone;
+                return editPhoneNumber(userId, phone);
+            }
+        },
+        editLanguage: {
+            type: GraphQLString,
+            args: {
+                userId: { type: GraphQLString },
+                language: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                const userId = args.userId;
+                const language = args.language;
+                return editLanguage(userId, language);
+            }
+        },
+        editDefaultCurrency: {
+            type: GraphQLString,
+            args: {
+                userId: { type: GraphQLString },
+                defaultcurrency: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                const userId = args.userId;
+                const defaultcurrency = args.defaultcurrency;
+                return editDefaultCurrency(userId, defaultcurrency);
+            }
+        },
+        editTimeZone: {
+            type: GraphQLString,
+            args: {
+                userId: { type: GraphQLString },
+                timezone: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                const userId = args.userId;
+                const timezone = args.timezone;
+                return editTimeZone(userId, timezone);
             }
         }
     }

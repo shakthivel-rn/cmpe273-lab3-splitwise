@@ -1,17 +1,17 @@
 const Users = require('../../ModelsMongoDB/Users');
 
-async function handle_request(message, callback) {
+async function editEmail(userId, email) {
   let status = 400;
-  const user = await Users.findOne({ _id: message.userId });
+  const user = await Users.findOne({ _id: userId });
   try {
-    user.email = message.email;
+    user.email = email;
     await user.save();
-    status = 200;
+    status = '200';
   } catch {
-    status = 400;
+    status = '400';
   } finally {
-    callback(null, status);
+    return status
   }
 }
 
-exports.handle_request = handle_request;
+exports.editEmail = editEmail;
